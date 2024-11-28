@@ -1,0 +1,1 @@
+![ECS architecture](./eks_architecture.png)
