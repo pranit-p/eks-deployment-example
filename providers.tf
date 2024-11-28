@@ -4,6 +4,11 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
+
+    helm = {
+      source  = "hashicorp/helm"
+      version = "= 2.16.1"
+    }
   }
 }
 
@@ -23,5 +28,11 @@ provider "aws" {
       github-repository = local.github_repository
       project           = local.project
     }
+  }
+}
+
+provider "helm" {
+  kubernetes {
+    config_path = "~/.kube/config"
   }
 }

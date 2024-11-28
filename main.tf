@@ -46,6 +46,10 @@ resource "aws_eks_addon" "eks_deployment_cluster_add_ons" {
   for_each = toset(local.cluster_add_on)
   cluster_name                = aws_eks_cluster.eks_deployment_cluster.name
   addon_name                  = each.value
+
+  resolve_conflicts = "OVERWRITE"
+
+#  depends_on = [aws_eks_node_group.eks_deployment_node_group]
 }
 
 resource "aws_eks_cluster" "eks_deployment_cluster" {
@@ -54,8 +58,8 @@ resource "aws_eks_cluster" "eks_deployment_cluster" {
 
   vpc_config {
     subnet_ids = [
-      aws_subnet.eks_deployment_private_subnet["us-east-1a"].id,
-      aws_subnet.eks_deployment_private_subnet["us-east-1b"].id,
+      aws_subnet.eks_deployment_public_subnet["us-east-1a"].id,
+      aws_subnet.eks_deployment_public_subnet["us-east-1b"].id,
     ]
   }
 

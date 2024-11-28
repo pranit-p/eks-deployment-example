@@ -30,31 +30,30 @@ resource "aws_iam_role_policy_attachment" "eks_log_group_AmazonEC2ContainerRegis
   role       = aws_iam_role.eks_log_group_role.name
 }
 
-#resource "aws_eks_node_group" "example" {
-#  cluster_name    = aws_eks_cluster.eks_deployment_cluster.name
-#  node_group_name = "eks-deployment-log-group"
-#  node_role_arn   = aws_iam_role.eks_log_group_role.arn
-#  subnet_ids      = [aws_subnet.eks_deployment_private_subnet["us-east-1a"].id]
-#
-#  capacity_type  = "ON_DEMAND"
-#  disk_size = 20
-#  instance_types = ["t2.medium"]
-#
-#  scaling_config {
-#    desired_size = 2
-#    max_size     = 4
-#    min_size     = 1
-#  }
-#
-#  update_config {
-#    max_unavailable = 1
-#  }
-#
-#  depends_on = [
-#    aws_iam_role_policy_attachment.eks_log_group_AmazonEC2ContainerRegistryReadOnly_attachment,
-#    aws_iam_role_policy_attachment.eks_log_group_AmazonEKS_CNI_Policy_attachment,
-#    aws_iam_role_policy_attachment.eks_log_group_AmazonEKSWorkerNodePolicy_attachment,
-#    aws_iam_role_policy_attachment.eks_deployment_role_policy_attachment,
-#    aws_eks_addon.eks_deployment_cluster_add_ons
-#  ]
-#}
+resource "aws_eks_node_group" "eks_deployment_node_group" {
+  cluster_name    = aws_eks_cluster.eks_deployment_cluster.name
+  node_group_name = "eks-deployment-log-group"
+  node_role_arn   = aws_iam_role.eks_log_group_role.arn
+  subnet_ids      = [aws_subnet.eks_deployment_public_subnet["us-east-1a"].id]
+
+  capacity_type  = "ON_DEMAND"
+  disk_size = 20
+  instance_types = ["t3.medium"]
+
+  scaling_config {
+    desired_size = 2
+    max_size     = 4
+    min_size     = 1
+  }
+
+  update_config {
+    max_unavailable = 1
+  }
+
+  depends_on = [
+    aws_iam_role_policy_attachment.eks_log_group_AmazonEC2ContainerRegistryReadOnly_attachment,
+    aws_iam_role_policy_attachment.eks_log_group_AmazonEKS_CNI_Policy_attachment,
+    aws_iam_role_policy_attachment.eks_log_group_AmazonEKSWorkerNodePolicy_attachment,
+    aws_iam_role_policy_attachment.eks_deployment_role_policy_attachment,
+  ]
+}

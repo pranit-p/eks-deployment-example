@@ -39,6 +39,7 @@ locals {
 resource "aws_subnet" "eks_deployment_public_subnet" {
   for_each =  { for subnet in local.public_subnet : subnet.availability_zone => subnet }
   vpc_id                  = aws_vpc.eks_deployment_vpc.id
+  map_public_ip_on_launch = true
   cidr_block              = each.value.ip_range
   availability_zone       = each.value.availability_zone
   tags = {
