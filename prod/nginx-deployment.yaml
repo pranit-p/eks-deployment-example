@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
+  name: nginx-deployment-prod
   labels:
     env: dev
 spec:
-  replicas: 3
+  replicas: 6
   selector:
     matchLabels:
       env: dev
