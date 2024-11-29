@@ -1,14 +1,37 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: nginx-app
+  name: nginx-app-dev
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: 'https://github.com/pranit-p/eks-deployment-example'
-    targetRevision: demo
-    path: 'yaml_files'
+    targetRevision: main
+    path: 'dev'
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nginx-app-prod
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/pranit-p/eks-deployment-example'
+    targetRevision: main
+    path: 'prod'
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: default
